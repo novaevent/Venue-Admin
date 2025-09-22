@@ -1,0 +1,275 @@
+"use client";
+
+import React, { Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
+
+import { X } from "lucide-react";
+
+import { VenueForm } from "./VenueForm";
+import { SlotForm } from "./SlotForm";
+import { ScoreForm } from "./ScoreForm";
+
+interface ModalProps {
+  editingItem: any;
+  modalType: "venue" | "slot" | "score";
+  onClose: () => void;
+  venues: any;
+  setVenues: Dispatch<SetStateAction<any>>;
+  slots: any;
+  setSlots: Dispatch<SetStateAction<any>>;
+  scores: any;
+  setScores: Dispatch<SetStateAction<any>>;
+}
+
+export default function Modal({
+  editingItem,
+  modalType,
+  onClose,
+  venues,
+  setVenues,
+  slots,
+  setSlots,
+  scores,
+  setScores,
+}: ModalProps) {
+  const addVenue = async (formData: any) => {
+    try {
+      const requestData = {
+        name: formData.name,
+        price: Number(formData.price),
+        location: formData.location,
+        description: formData.description,
+        seating_capacity: Number(formData.seating_capacity),
+        parking_capacity: Number(formData.parking_capacity),
+        hall_seating_capacity: Number(formData.hall_seating_capacity),
+        dining_seating_capacity: Number(formData.dining_seating_capacity),
+        room_capacity: Number(formData.room_capacity),
+        floating_capacity: Number(formData.floating_capacity),
+        facilities: [],
+        thumbnail_image_url: formData.thumbnail_image_url,
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/venues`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!res.ok) toast.error("Something went wrong while adding Venue!");
+
+      setVenues((prev: any) => [...(prev || []), requestData]);
+      onClose();
+    } catch (err) {
+      console.error("Error adding venue:", err);
+    }
+  };
+
+  const addSlot = async (formData: any) => {
+    try {
+      const requestData = {
+        venue_id: Number(formData.venue_id),
+        label: formData.label,
+        start_time: formData.start_time,
+        end_time: formData.end_time,
+        availability: formData.availability,
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slot`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!res.ok) toast.error("Something went wrong while adding Slots!");
+
+      // Update state immediately
+      setSlots((prev: any) => [...prev, requestData]);
+      onClose();
+    } catch (err) {
+      console.error("Error adding slot:", err);
+    }
+  };
+
+  const addScore = async (formData: any) => {
+    try {
+      const requestData = {
+        venue_id: Number(formData.venue_id),
+        cleanliness: Number(formData.cleanliness),
+        location: Number(formData.location),
+        hygiene: Number(formData.hygiene),
+        check_in: Number(formData.check_in),
+        overall: Number(formData.overall),
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/score`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!res.ok) toast.error("Something went wrong while adding Score!");
+
+      setScores((prev: any) => [...prev, requestData]);
+      onClose();
+    } catch (err) {
+      console.error("Error adding score:", err);
+    }
+  };
+
+  const updateVenue = async (venueId: number, formData: any) => {
+    try {
+      const requestData = {
+        venue_id: venueId,
+        name: formData.name,
+        price: Number(formData.price),
+        location: formData.location,
+        description: formData.description,
+        seating_capacity: Number(formData.seating_capacity),
+        parking_capacity: Number(formData.parking_capacity),
+        hall_seating_capacity: Number(formData.hall_seating_capacity),
+        dining_seating_capacity: Number(formData.dining_seating_capacity),
+        room_capacity: Number(formData.room_capacity),
+        floating_capacity: Number(formData.floating_capacity),
+        facilities: [],
+        thumbnail_img_url: formData.thumbnail_image_url,
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/venue`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!res.ok) throw new Error("Failed to update venue");
+
+      setVenues((prev: any) =>
+        prev.map((v: any) => (v.venue_id === venueId ? requestData : v))
+      );
+      onClose();
+    } catch (err) {
+      console.error("Error updating venue:", err);
+    }
+  };
+
+  const updateSlot = async (slotId: number, formData: any) => {
+    try {
+      const requestData = {
+        slot_id: slotId,
+        venue_id: Number(formData.venue_id),
+        label: formData.label,
+        start_time: formData.start_time,
+        end_time: formData.end_time,
+        availability: formData.availability,
+      };
+      console.log(requestData);
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slots`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!res.ok) toast.error("Something went wrong while updating Slots!");
+
+      const updatedSlot = await res.json();
+      setSlots((prev: any) =>
+        prev.map((s: any) => (s.slot_id === slotId ? updatedSlot : s))
+      );
+      onClose();
+    } catch (err) {
+      console.error("Error updating slot:", err);
+    }
+  };
+
+  const updateScore = async (ratingId: number, formData: any) => {
+    try {
+      const requestData = {
+        rating_id: ratingId,
+        venue_id: Number(formData.venue_id),
+        cleanliness: Number(formData.cleanliness),
+        location: Number(formData.location),
+        hygiene: Number(formData.hygiene),
+        check_in: Number(formData.check_in),
+        overall: Number(formData.overall),
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/score`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!res.ok) throw new Error("Failed to update score");
+
+      const updatedScore = await res.json();
+      setScores((prev: any) =>
+        prev.map((s: any) => (s.rating_id === ratingId ? updatedScore : s))
+      );
+      onClose();
+    } catch (err) {
+      console.error("Error updating score:", err);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        {/* Modal Header */}
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-2xl font-bold text-gray-900">
+            {editingItem ? "Edit" : "Add"}{" "}
+            {modalType === "venue"
+              ? "Venue"
+              : modalType === "slot"
+              ? "Time Slot"
+              : "Rating"}
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-6">
+          {modalType === "venue" && (
+            <VenueForm
+              venue={editingItem}
+              onSave={(data) => {
+                if (editingItem?.venue_id)
+                  updateVenue(editingItem.venue_id, data);
+                else addVenue(data);
+              }}
+              onClose={onClose}
+            />
+          )}
+          {modalType === "slot" && (
+            <SlotForm
+              slot={editingItem}
+              venues={venues}
+              closeModal={onClose}
+              onSave={(data) => {
+                if (editingItem?.slot_id) updateSlot(editingItem.slot_id, data);
+                else addSlot(data);
+              }}
+            />
+          )}
+          {modalType === "score" && (
+            <ScoreForm
+              score={editingItem}
+              venues={venues}
+              onSave={(data) => {
+                if (editingItem?.rating_id)
+                  updateScore(editingItem.rating_id, data);
+                else addScore(data);
+              }}
+              onClose={onClose}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
