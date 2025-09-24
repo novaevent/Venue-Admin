@@ -7,6 +7,7 @@ import { Plus, Edit, Trash2, MapPin, Clock, Star, X } from "lucide-react";
 import { formatNumber } from "@/utils/number-utils";
 import { formatDateTime } from "@/utils/date-uitls";
 import Modal from "@/components/Modal";
+import Header from "@/components/Header";
 
 const VenueAdminDashboard = () => {
   const [activeTab, setActiveTab] = useState<"venues" | "slots" | "scores">(
@@ -153,16 +154,8 @@ const VenueAdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <h1 className="text-4xl font-bold text-gray-900 tracking-wide">
-            Nova Admin
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Manage venues, time slots, and ratings effortlessly
-          </p>
-        </div>
-      </div>
+      <Header />
+
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Tabs */}
