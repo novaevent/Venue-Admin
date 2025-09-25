@@ -8,6 +8,7 @@ import { X } from "lucide-react";
 import { VenueForm } from "./VenueForm";
 import { SlotForm } from "./SlotForm";
 import { ScoreForm } from "./ScoreForm";
+import { useAppContext } from "@/contexts/AppContext";
 
 interface ModalProps {
   editingItem: any;
@@ -32,6 +33,8 @@ export default function Modal({
   scores,
   setScores,
 }: ModalProps) {
+  const { url } = useAppContext();
+
   const addVenue = async (formData: any) => {
     try {
       const requestData = {
@@ -49,7 +52,7 @@ export default function Modal({
         thumbnail_image_url: formData.thumbnail_image_url,
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/venues`, {
+      const res = await fetch(`${url}/venues`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -74,7 +77,7 @@ export default function Modal({
         availability: formData.availability,
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slot`, {
+      const res = await fetch(`${url}/slot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -100,7 +103,7 @@ export default function Modal({
         overall: Number(formData.overall),
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/score`, {
+      const res = await fetch(`${url}/score`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -133,7 +136,7 @@ export default function Modal({
         thumbnail_img_url: formData.thumbnail_image_url,
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/venue`, {
+      const res = await fetch(`${url}/venue`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -161,7 +164,7 @@ export default function Modal({
         availability: formData.availability,
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slots`, {
+      const res = await fetch(`${url}/slots`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -190,7 +193,7 @@ export default function Modal({
         overall: Number(formData.overall),
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/score`, {
+      const res = await fetch(`${url}/score`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),

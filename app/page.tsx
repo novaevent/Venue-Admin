@@ -9,8 +9,11 @@ import Header from "@/components/Header";
 import VenueTable from "@/components/VenueTable";
 import SlotTable from "@/components/SlotTable";
 import ScoresTable from "@/components/ScoresTable";
+import { useAppContext } from "@/contexts/AppContext";
 
 const VenueAdminDashboard = () => {
+  const { url } = useAppContext();
+
   const [activeTab, setActiveTab] = useState<"venues" | "slots" | "scores">(
     "venues"
   );
@@ -30,9 +33,9 @@ const VenueAdminDashboard = () => {
   const fetchData = async () => {
     try {
       const [venuesRes, slotsRes, scoresRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/venues`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/slot`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/score`),
+        fetch(`${url}/venues`),
+        fetch(`${url}/slot`),
+        fetch(`${url}/score`),
       ]);
 
       const venuesData = await venuesRes.json();

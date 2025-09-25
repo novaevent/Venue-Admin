@@ -1,3 +1,4 @@
+import { useAppContext } from "@/contexts/AppContext";
 import { Edit, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
@@ -15,6 +16,8 @@ export default function ScoresTable({
   venues,
   openModal,
 }: ScoreTableProps) {
+  const { url } = useAppContext();
+
   const deleteScore = async (ratingId: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this score?"
@@ -22,7 +25,7 @@ export default function ScoresTable({
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/score`, {
+      const res = await fetch(`${url}/score`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating_id: ratingId }),

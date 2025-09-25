@@ -1,3 +1,4 @@
+import { useAppContext } from "@/contexts/AppContext";
 import { formatDateTime } from "@/utils/date-uitls";
 import { Edit, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
@@ -16,6 +17,8 @@ export default function SlotTable({
   venues,
   openModal,
 }: SlotTableProps) {
+  const { url } = useAppContext();
+
   const deleteSlot = async (slotId: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this slot?"
@@ -23,7 +26,7 @@ export default function SlotTable({
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slots`, {
+      const res = await fetch(`${url}/slots`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slot_id: slotId }),

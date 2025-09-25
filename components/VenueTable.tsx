@@ -1,3 +1,4 @@
+import { useAppContext } from "@/contexts/AppContext";
 import { formatNumber } from "@/utils/number-utils";
 import { Edit, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
@@ -14,6 +15,8 @@ export default function VenueTable({
   setVenues,
   openModal,
 }: VenueTableProps) {
+  const { url } = useAppContext();
+
   const deleteVenue = async (venueId: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this venue?"
@@ -21,7 +24,7 @@ export default function VenueTable({
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/venue`, {
+      const res = await fetch(`${url}/venue`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ venue_id: venueId }),
