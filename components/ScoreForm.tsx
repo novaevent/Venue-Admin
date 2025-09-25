@@ -70,7 +70,7 @@ export const ScoreForm = ({
       <select
         value={formData.venue_id}
         onChange={(e) => setFormData({ ...formData, venue_id: e.target.value })}
-        className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-200"
         required
       >
         <option value="">Select Venue</option>

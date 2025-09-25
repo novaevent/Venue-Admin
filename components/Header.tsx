@@ -54,11 +54,15 @@ export default function Header() {
               onChange={(e) =>
                 setSelectedServer(e.target.value as "local" | "prod")
               }
-              className="border rounded px-3 py-2"
+              className="border rounded px-3 py-2 text-gray-900"
               defaultValue={selectedServer}
             >
-              <option value="prod">Production</option>
-              <option value="local">Local</option>
+              <option value="prod" className="text-gray-900">
+                Production
+              </option>
+              <option value="local" className="text-gray-900">
+                Local
+              </option>
             </select>
           </div>
           <div className="flex flex-row items-center gap-x-3">
