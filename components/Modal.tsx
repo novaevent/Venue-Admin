@@ -198,9 +198,8 @@ export default function Modal({
 
       if (!res.ok) throw new Error("Failed to update score");
 
-      const updatedScore = await res.json();
       setScores((prev: any) =>
-        prev.map((s: any) => (s.rating_id === ratingId ? updatedScore : s))
+        prev.map((s: any) => (s.rating_id === ratingId ? requestData : s))
       );
       onClose();
     } catch (err) {
