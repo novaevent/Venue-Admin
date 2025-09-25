@@ -40,6 +40,7 @@ export const SlotForm = ({
   }, [formData.start_time]);
 
   const handleSubmit = () => {
+    console.log(formData);
     if (!formData.venue_id) return alert("Please select a venue");
     if (!formData.label) return alert("Please enter slot label");
     if (!formData.start_time || !formData.end_time)
@@ -58,9 +59,7 @@ export const SlotForm = ({
     <div className="space-y-4 text-black">
       <select
         value={formData.venue_id}
-        onChange={(e) =>
-          setFormData({ ...formData, venue_id: Number(e.target.value) })
-        }
+        onChange={(e) => setFormData({ ...formData, venue_id: e.target.value })}
         className={`w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
           (venues?.length || 0) === 0 ? "bg-gray-100 cursor-not-allowed" : ""
         }`}
@@ -96,7 +95,6 @@ export const SlotForm = ({
             }}
             showTimeSelect
             timeIntervals={15}
-            // dateFormat="dd/MM/yyyy hh:mm aa"
             dateFormat="Pp"
             className="p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
@@ -111,7 +109,6 @@ export const SlotForm = ({
             }}
             showTimeSelect
             timeIntervals={15}
-            // dateFormat="dd/MM/yyyy hh:mm aa"
             dateFormat="Pp"
             minDate={formData.start_time || undefined}
             maxDate={formData.start_time || undefined}
