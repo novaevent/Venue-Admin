@@ -67,7 +67,7 @@ export default function Modal({
   const addSlot = async (formData: any) => {
     try {
       const requestData = {
-        venue_id: Number(formData.venue_id),
+        venue_id: formData.venue_id,
         label: formData.label,
         start_time: formData.start_time,
         end_time: formData.end_time,
@@ -82,7 +82,6 @@ export default function Modal({
 
       if (!res.ok) toast.error("Something went wrong while adding Slots!");
 
-      // Update state immediately
       setSlots((prev: any) => [...prev, requestData]);
       onClose();
     } catch (err) {
@@ -93,7 +92,7 @@ export default function Modal({
   const addScore = async (formData: any) => {
     try {
       const requestData = {
-        venue_id: Number(formData.venue_id),
+        venue_id: formData.venue_id,
         cleanliness: Number(formData.cleanliness),
         location: Number(formData.location),
         hygiene: Number(formData.hygiene),
@@ -116,7 +115,7 @@ export default function Modal({
     }
   };
 
-  const updateVenue = async (venueId: number, formData: any) => {
+  const updateVenue = async (venueId: string, formData: any) => {
     try {
       const requestData = {
         venue_id: venueId,
@@ -151,11 +150,11 @@ export default function Modal({
     }
   };
 
-  const updateSlot = async (slotId: number, formData: any) => {
+  const updateSlot = async (slotId: string, formData: any) => {
     try {
       const requestData = {
         slot_id: slotId,
-        venue_id: Number(formData.venue_id),
+        venue_id: formData.venue_id,
         label: formData.label,
         start_time: formData.start_time,
         end_time: formData.end_time,
@@ -181,11 +180,11 @@ export default function Modal({
     }
   };
 
-  const updateScore = async (ratingId: number, formData: any) => {
+  const updateScore = async (ratingId: string, formData: any) => {
     try {
       const requestData = {
         rating_id: ratingId,
-        venue_id: Number(formData.venue_id),
+        venue_id: formData.venue_id,
         cleanliness: Number(formData.cleanliness),
         location: Number(formData.location),
         hygiene: Number(formData.hygiene),

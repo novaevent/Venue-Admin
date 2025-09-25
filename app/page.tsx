@@ -92,10 +92,6 @@ const VenueAdminDashboard = () => {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Tabs */}
         <div className="flex space-x-2 bg-gray-100 p-1 rounded-full mb-6 shadow-inner">
-          {/*
-      Define the tabs array outside of JSX mapping so TypeScript
-      correctly infers the key types
-    */}
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isDisabled =
