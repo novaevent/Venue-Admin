@@ -160,7 +160,6 @@ export default function Modal({
         end_time: formData.end_time,
         availability: formData.availability,
       };
-      console.log(requestData);
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slots`, {
         method: "PUT",
@@ -170,9 +169,8 @@ export default function Modal({
 
       if (!res.ok) toast.error("Something went wrong while updating Slots!");
 
-      const updatedSlot = await res.json();
       setSlots((prev: any) =>
-        prev.map((s: any) => (s.slot_id === slotId ? updatedSlot : s))
+        prev.map((s: any) => (s.slot_id === slotId ? requestData : s))
       );
       onClose();
     } catch (err) {
