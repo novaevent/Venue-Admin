@@ -1,5 +1,6 @@
 "use client";
 
+import { partnershipType } from "@/constants/screen-constants";
 import { Save, X } from "lucide-react";
 import { useState } from "react";
 
@@ -13,6 +14,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
   const [formData, setFormData] = useState({
     name: venue?.name || "",
     price: venue?.price || "",
+    partnership_type: venue?.partnership_type || "",
     location: venue?.location || "",
     description: venue?.description || "",
     seating_capacity: venue?.seating_capacity || "",
@@ -47,6 +49,22 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
           className=" no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
       </div>
+
+      <select
+        value={formData.partnership_type}
+        onChange={(e) =>
+          setFormData({ ...formData, partnership_type: e.target.value })
+        }
+        className={`w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+        required
+      >
+        <option key={"Standard"} value={partnershipType.STANDARD}>
+          Standard
+        </option>
+        <option key={"Priority"} value={partnershipType.PRIORITY}>
+          Priority
+        </option>
+      </select>
 
       <input
         type="text"

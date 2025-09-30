@@ -47,6 +47,7 @@ export default function VenueTable({
           <th className="py-3 px-4">Location</th>
           <th className="py-3 px-4">Price</th>
           <th className="py-3 px-4">Capacity</th>
+          <th className="py-3 px-4">Partnership Type</th>
           <th className="py-3 px-4">Actions</th>
         </tr>
       </thead>
@@ -65,6 +66,9 @@ export default function VenueTable({
             </td>
             <td className="py-4 px-4 text-gray-600">
               {formatNumber(venue.seating_capacity)}
+            </td>
+            <td className="py-4 px-4 text-gray-600">
+              {formatNumber(venue.partnership_type)}
             </td>
             <td className="py-4 px-4">
               <div className="flex gap-2">
