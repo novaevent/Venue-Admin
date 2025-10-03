@@ -4,7 +4,6 @@ import { partnershipType } from "@/constants/screen-constants";
 import { Save, X } from "lucide-react";
 import { useState } from "react";
 
-
 interface VenueFormProps {
   venue: any;
   onSave: (formData: any) => void;
@@ -23,7 +22,7 @@ interface VenueFormData {
   dining_seating_capacity: string;
   room_capacity: string;
   floating_capacity: string;
-  thumbnail_image_file?: File; // 👈 only file here
+  thumbnail_image_file?: File;
 }
 
 export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
@@ -39,6 +38,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
     dining_seating_capacity: venue?.dining_seating_capacity || "",
     room_capacity: venue?.room_capacity || "",
     floating_capacity: venue?.floating_capacity || "",
+    thumbnail_image_file: undefined,
   });
 
   const handleSubmit = () => onSave(formData);
@@ -166,20 +166,19 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
         />
       </div>
 
-    <input
-      type="file"
-      accept="image/*"
-      onChange={(e) => {
-        if (e.target.files?.[0]) {
-          setFormData({
-            ...formData,
-            thumbnail_image_file: e.target.files[0],
-          });
-        }
-      }}
-      className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-    />
-
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          if (e.target.files?.[0]) {
+            setFormData({
+              ...formData,
+              thumbnail_image_file: e.target.files[0],
+            });
+          }
+        }}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
 
       {/* Buttons */}
       <div className="flex justify-end gap-3 mt-4">
