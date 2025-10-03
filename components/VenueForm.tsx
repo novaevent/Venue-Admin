@@ -10,11 +10,26 @@ interface VenueFormProps {
   onClose: () => void;
 }
 
+interface VenueFormData {
+  name: string;
+  price: string;
+  partnership_type: string;
+  location: string;
+  description: string;
+  seating_capacity: string;
+  parking_capacity: string;
+  hall_seating_capacity: string;
+  dining_seating_capacity: string;
+  room_capacity: string;
+  floating_capacity: string;
+  thumbnail_image_file?: File;
+}
+
 export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<VenueFormData>({
     name: venue?.name || "",
     price: venue?.price || "",
-    partnership_type: venue?.partnership_type || "",
+    partnership_type: venue?.partnership_type || partnershipType.STANDARD,
     location: venue?.location || "",
     description: venue?.description || "",
     seating_capacity: venue?.seating_capacity || "",
@@ -23,7 +38,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
     dining_seating_capacity: venue?.dining_seating_capacity || "",
     room_capacity: venue?.room_capacity || "",
     floating_capacity: venue?.floating_capacity || "",
-    thumbnail_image_url: venue?.thumbnail_image_url || "",
+    thumbnail_image_file: undefined,
   });
 
   const handleSubmit = () => onSave(formData);
@@ -152,13 +167,17 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
       </div>
 
       <input
-        type="url"
-        placeholder="Thumbnail Image URL"
-        value={formData.thumbnail_image_url}
-        onChange={(e) =>
-          setFormData({ ...formData, thumbnail_image_url: e.target.value })
-        }
-        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          if (e.target.files?.[0]) {
+            setFormData({
+              ...formData,
+              thumbnail_image_file: e.target.files[0],
+            });
+          }
+        }}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
       />
 
       {/* Buttons */}

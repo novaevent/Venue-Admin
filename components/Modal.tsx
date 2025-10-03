@@ -37,7 +37,7 @@ export default function Modal({
 
   const addVenue = async (formData: any) => {
     try {
-      const requestData = {
+      const venueData = {
         name: formData.name,
         price: Number(formData.price),
         location: formData.location,
@@ -50,18 +50,37 @@ export default function Modal({
         room_capacity: Number(formData.room_capacity),
         floating_capacity: Number(formData.floating_capacity),
         facilities: [],
-        thumbnail_image_url: formData.thumbnail_image_url,
       };
+
+      const payload = new FormData();
+
+      payload.append("name", formData.name);
+      payload.append("price", formData.price);
+      payload.append("location", formData.location);
+      payload.append("description", formData.description);
+      payload.append("partnership_type", formData.partnership_type);
+      payload.append("seating_capacity", formData.seating_capacity);
+      payload.append("parking_capacity", formData.parking_capacity);
+      payload.append("hall_seating_capacity", formData.hall_seating_capacity);
+      payload.append(
+        "dining_seating_capacity",
+        formData.dining_seating_capacity
+      );
+      payload.append("room_capacity", formData.room_capacity);
+      payload.append("floating_capacity", formData.floating_capacity);
+
+      if (formData.thumbnail_image_file) {
+        payload.append("thumbnail_image", formData.thumbnail_image_file);
+      }
 
       const res = await fetch(`${url}/venues`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestData),
+        body: payload,
       });
 
       if (!res.ok) toast.error("Something went wrong while adding Venue!");
 
-      setVenues((prev: any) => [...(prev || []), requestData]);
+      setVenues((prev: any) => [...(prev || []), venueData]);
       onClose();
     } catch (err) {
       console.error("Error adding venue:", err);
@@ -121,33 +140,38 @@ export default function Modal({
 
   const updateVenue = async (venueId: string, formData: any) => {
     try {
-      const requestData = {
-        venue_id: venueId,
-        name: formData.name,
-        price: Number(formData.price),
-        location: formData.location,
-        description: formData.description,
-        partnership_type: formData?.partnership_type,
-        seating_capacity: Number(formData.seating_capacity),
-        parking_capacity: Number(formData.parking_capacity),
-        hall_seating_capacity: Number(formData.hall_seating_capacity),
-        dining_seating_capacity: Number(formData.dining_seating_capacity),
-        room_capacity: Number(formData.room_capacity),
-        floating_capacity: Number(formData.floating_capacity),
-        facilities: [],
-        thumbnail_img_url: formData.thumbnail_image_url,
-      };
+      const payload = new FormData();
+
+      payload.append("venue_id", venueId);
+      payload.append("name", formData.name);
+      payload.append("price", formData.price);
+      payload.append("location", formData.location);
+      payload.append("description", formData.description);
+      payload.append("partnership_type", formData.partnership_type);
+      payload.append("seating_capacity", formData.seating_capacity);
+      payload.append("parking_capacity", formData.parking_capacity);
+      payload.append("hall_seating_capacity", formData.hall_seating_capacity);
+      payload.append(
+        "dining_seating_capacity",
+        formData.dining_seating_capacity
+      );
+      payload.append("room_capacity", formData.room_capacity);
+      payload.append("floating_capacity", formData.floating_capacity);
+
+      if (formData.thumbnail_image_file) {
+        payload.append("thumbnail_image", formData.thumbnail_image_file);
+      }
 
       const res = await fetch(`${url}/venue`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestData),
+        body: payload,
       });
 
       if (!res.ok) throw new Error("Failed to update venue");
 
+      const updatedVenue = await res.json();
       setVenues((prev: any) =>
-        prev.map((v: any) => (v.venue_id === venueId ? requestData : v))
+        prev.map((v: any) => (v.venue_id === venueId ? updatedVenue : v))
       );
       onClose();
     } catch (err) {
