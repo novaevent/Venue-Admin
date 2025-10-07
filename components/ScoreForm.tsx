@@ -28,7 +28,7 @@ export const ScoreForm = ({
   const [isValid, setIsValid] = useState(false);
 
   const handleChange = (field: string, value: string) => {
-    let numericValue: number | "" =
+    const numericValue: number | "" =
       value === "" ? "" : Math.min(Math.max(parseFloat(value), 0), 5);
     setFormData({ ...formData, [field]: numericValue });
   };
