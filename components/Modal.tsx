@@ -140,6 +140,21 @@ export default function Modal({
 
   const updateVenue = async (venueId: string, formData: any) => {
     try {
+      const venueData = {
+        name: formData.name,
+        price: Number(formData.price),
+        location: formData.location,
+        description: formData.description,
+        partnership_type: formData?.partnership_type,
+        seating_capacity: Number(formData.seating_capacity),
+        parking_capacity: Number(formData.parking_capacity),
+        hall_seating_capacity: Number(formData.hall_seating_capacity),
+        dining_seating_capacity: Number(formData.dining_seating_capacity),
+        room_capacity: Number(formData.room_capacity),
+        floating_capacity: Number(formData.floating_capacity),
+        facilities: [],
+      };
+
       const payload = new FormData();
 
       payload.append("venue_id", venueId);
@@ -162,6 +177,15 @@ export default function Modal({
         payload.append("thumbnail_image", formData.thumbnail_image_file);
       }
 
+      const printFormDataAsJSON = (formData: FormData) => {
+        const obj: Record<string, any> = {};
+        formData.forEach((value, key) => {
+          obj[key] = value;
+        });
+        console.log(JSON.stringify(obj, null, 2));
+      };
+      printFormDataAsJSON(payload);
+
       const res = await fetch(`${url}/venue`, {
         method: "PUT",
         body: payload,
@@ -169,9 +193,8 @@ export default function Modal({
 
       if (!res.ok) throw new Error("Failed to update venue");
 
-      const updatedVenue = await res.json();
       setVenues((prev: any) =>
-        prev.map((v: any) => (v.venue_id === venueId ? updatedVenue : v))
+        prev.map((v: any) => (v.venue_id === venueId ? venueData : v))
       );
       onClose();
     } catch (err) {
