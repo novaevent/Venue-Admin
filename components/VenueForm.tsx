@@ -2,7 +2,7 @@
 
 import { partnershipType } from "@/constants/screen-constants";
 import { Save, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface VenueFormProps {
   venue: any;
@@ -41,11 +41,31 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
     thumbnail_image_file: undefined,
   });
 
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    const valid =
+      formData.name.trim() !== "" &&
+      formData.price !== "" &&
+      !isNaN(Number(formData.price)) &&
+      formData.partnership_type.trim() !== "" &&
+      formData.location.trim() !== "" &&
+      formData.description.trim() !== "" &&
+      [
+        formData.seating_capacity,
+        formData.parking_capacity,
+        formData.hall_seating_capacity,
+        formData.dining_seating_capacity,
+        formData.room_capacity,
+        formData.floating_capacity,
+      ].every((v) => v !== "" && !isNaN(Number(v)));
+    setIsValid(valid);
+  }, [formData]);
+
   const handleSubmit = () => onSave(formData);
 
   return (
     <div className="space-y-6 text-black">
-      {/* Basic Info */}
       <div className="grid grid-cols-2 gap-4">
         <input
           type="text"
@@ -61,7 +81,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
           placeholder="Price"
           value={formData.price}
           onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-          className=" no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
       </div>
 
@@ -70,15 +90,11 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
         onChange={(e) =>
           setFormData({ ...formData, partnership_type: e.target.value })
         }
-        className={`w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         required
       >
-        <option key={"Standard"} value={partnershipType.STANDARD}>
-          Standard
-        </option>
-        <option key={"Priority"} value={partnershipType.PRIORITY}>
-          Priority
-        </option>
+        <option value={partnershipType.STANDARD}>Standard</option>
+        <option value={partnershipType.PRIORITY}>Priority</option>
       </select>
 
       <input
@@ -99,7 +115,6 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
         className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
       />
 
-      {/* Capacities */}
       <div className="grid grid-cols-3 gap-4">
         <input
           type="number"
@@ -108,7 +123,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
           onChange={(e) =>
             setFormData({ ...formData, seating_capacity: e.target.value })
           }
-          className=" no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
         <input
           type="number"
@@ -117,7 +132,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
           onChange={(e) =>
             setFormData({ ...formData, parking_capacity: e.target.value })
           }
-          className=" no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
         <input
           type="number"
@@ -153,7 +168,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
           onChange={(e) =>
             setFormData({ ...formData, room_capacity: e.target.value })
           }
-          className=" no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
         <input
           type="number"
@@ -162,7 +177,7 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
           onChange={(e) =>
             setFormData({ ...formData, floating_capacity: e.target.value })
           }
-          className=" no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="no-spinner p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
       </div>
 
@@ -180,12 +195,16 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
         className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
       />
 
-      {/* Buttons */}
       <div className="flex justify-end gap-3 mt-4">
         <button
           type="button"
+          disabled={!isValid}
           onClick={handleSubmit}
-          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg transition ${
+            isValid
+              ? "bg-blue-600 text-white hover:bg-blue-700"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
         >
           <Save size={20} /> Save Venue
         </button>

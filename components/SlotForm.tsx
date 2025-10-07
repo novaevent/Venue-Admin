@@ -25,12 +25,13 @@ export const SlotForm = ({
     availability: slot?.availability !== undefined ? slot.availability : true,
   });
 
-  // Auto-set end_time if start_time changes
+  const [isValid, setIsValid] = useState(false);
+
   useEffect(() => {
     if (formData.start_time) {
       const minEndTime = new Date(
         formData.start_time.getTime() + 15 * 60 * 1000
-      ); // +15 minutes
+      );
       if (!formData.end_time || formData.end_time <= formData.start_time) {
         setFormData((prev) => ({ ...prev, end_time: minEndTime }));
       }
@@ -39,19 +40,22 @@ export const SlotForm = ({
     }
   }, [formData.start_time]);
 
-  const handleSubmit = () => {
-    console.log(formData);
-    if (!formData.venue_id) return alert("Please select a venue");
-    if (!formData.label) return alert("Please enter slot label");
-    if (!formData.start_time || !formData.end_time)
-      return alert("Please select start and end time");
-    if (formData.end_time <= formData.start_time)
-      return alert("End time must be after start time");
+  useEffect(() => {
+    const valid =
+      formData.venue_id &&
+      formData.label.trim() !== "" &&
+      formData.start_time &&
+      formData.end_time &&
+      formData.end_time > formData.start_time;
+    setIsValid(valid);
+  }, [formData]);
 
+  const handleSubmit = () => {
+    if (!isValid) return;
     onSave({
       ...formData,
-      start_time: formData.start_time.toISOString(),
-      end_time: formData.end_time.toISOString(),
+      start_time: formData.start_time!.toISOString(),
+      end_time: formData.end_time!.toISOString(),
     });
   };
 
@@ -63,7 +67,6 @@ export const SlotForm = ({
         className={`w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
           (venues?.length || 0) === 0 ? "bg-gray-100 cursor-not-allowed" : ""
         }`}
-        required
         disabled={(venues?.length || 0) === 0}
       >
         <option value="" disabled>
@@ -82,7 +85,6 @@ export const SlotForm = ({
         value={formData.label}
         onChange={(e) => setFormData({ ...formData, label: e.target.value })}
         className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        required
       />
 
       <div className="grid grid-cols-2 gap-4">
@@ -111,7 +113,6 @@ export const SlotForm = ({
             timeIntervals={15}
             dateFormat="Pp"
             minDate={formData.start_time || undefined}
-            maxDate={formData.start_time || undefined}
             minTime={
               formData.start_time
                 ? new Date(
@@ -157,7 +158,12 @@ export const SlotForm = ({
         <button
           type="button"
           onClick={handleSubmit}
-          className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+          disabled={!isValid}
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-colors ${
+            isValid
+              ? "bg-green-600 hover:bg-green-700 text-white"
+              : "bg-gray-300 text-gray-600 cursor-not-allowed"
+          }`}
         >
           <Save size={20} />
           Save Slot

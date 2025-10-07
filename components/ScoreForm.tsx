@@ -1,7 +1,7 @@
 "use client";
 
 import { Save, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ScoreFormProps {
   score: any;
@@ -25,46 +25,33 @@ export const ScoreForm = ({
     overall: score?.overall || "",
   });
 
-  const handleChange = (field: string, value: string) => {
-    // Ensure value is numeric and capped at 5
-    let numericValue: number | null = parseFloat(value);
-    if (isNaN(numericValue)) numericValue = null;
-    else if (numericValue > 5) numericValue = 5;
-    else if (numericValue < 0) numericValue = 0;
+  const [isValid, setIsValid] = useState(false);
 
+  const handleChange = (field: string, value: string) => {
+    let numericValue: number | "" =
+      value === "" ? "" : Math.min(Math.max(parseFloat(value), 0), 5);
     setFormData({ ...formData, [field]: numericValue });
   };
 
-  const handleSubmit = () => {
-    // Check all fields are filled
-    if (!formData.venue_id) {
-      alert("Please select a venue");
-      return;
-    }
+  useEffect(() => {
+    const valid =
+      formData.venue_id.trim() !== "" &&
+      ["cleanliness", "location", "hygiene", "check_in", "overall"].every(
+        (key) => {
+          const val = formData[key as keyof typeof formData];
+          return (
+            val !== "" &&
+            !isNaN(Number(val)) &&
+            Number(val) >= 0 &&
+            Number(val) <= 5
+          );
+        }
+      );
+    setIsValid(valid);
+  }, [formData]);
 
-    // List of rating fields
-    const ratingFields: (keyof typeof formData)[] = [
-      "cleanliness",
-      "location",
-      "hygiene",
-      "check_in",
-      "overall",
-    ];
+  const handleSubmit = () => onSave(formData);
 
-    for (const field of ratingFields) {
-      const value = formData[field];
-      if (value === "" || value === null || value === undefined) {
-        alert(`Please provide a value for ${field}`);
-        return;
-      }
-      if (typeof value === "number" && (value < 0 || value > 5)) {
-        alert(`${field} must be between 0 and 5`);
-        return;
-      }
-    }
-
-    onSave(formData);
-  };
   return (
     <div className="space-y-4 text-black">
       <select
@@ -141,8 +128,13 @@ export const ScoreForm = ({
       <div className="flex gap-3">
         <button
           type="button"
+          disabled={!isValid}
           onClick={handleSubmit}
-          className="flex items-center gap-2 bg-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-yellow-700 transition-colors"
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg transition ${
+            isValid
+              ? "bg-yellow-600 text-white hover:bg-yellow-700"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
         >
           <Save size={20} />
           Save Rating
