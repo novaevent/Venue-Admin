@@ -82,6 +82,7 @@ export default function Modal({
 
       setVenues((prev: any) => [...(prev || []), venueData]);
       onClose();
+      window.location.reload();
     } catch (err) {
       console.error("Error adding venue:", err);
     }
