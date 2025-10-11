@@ -14,11 +14,20 @@ export const AppContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [environment, setEnvironment] = useState<"local" | "prod">("prod");
+  const initialEnv =
+    (typeof window !== "undefined" && localStorage.getItem("environment")) ||
+    "prod";
+
+  const [environment, setEnvironment] = useState<"local" | "prod">(
+    initialEnv as "local" | "prod"
+  );
   const [url, setUrl] = useState<string>(process.env.NEXT_PUBLIC_API_URL ?? "");
 
   useEffect(() => {
-    if (environment === "local")
+    localStorage.setItem("environment", environment);
+    const currentEnvironment =
+      localStorage.getItem("environment") ?? environment;
+    if (currentEnvironment === "local")
       setUrl(process.env.NEXT_PUBLIC_API_DEV_URL ?? "");
     else setUrl(process.env.NEXT_PUBLIC_API_URL ?? "");
   }, [environment]);

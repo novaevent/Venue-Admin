@@ -1,5 +1,6 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { formatDateTime } from "@/utils/date-uitls";
+import { formatNumber } from "@/utils/number-utils";
 import { Edit, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
@@ -43,12 +44,13 @@ export default function SlotTable({
   return (
     <table className="w-full table-auto border-collapse">
       <thead>
-        <tr className="bg-gray-50 text-left text-gray-700 uppercase text-sm font-semibold">
+        <tr className="bg-gray-50 text-left text-gray-700 text-sm font-semibold">
           <th className="py-3 px-4">Label</th>
           <th className="py-3 px-4">Venue</th>
           <th className="py-3 px-4">Start Time</th>
           <th className="py-3 px-4">End Time</th>
           <th className="py-3 px-4">Status</th>
+          <th className="py-3 px-4">Price</th>
           <th className="py-3 px-4">Actions</th>
         </tr>
       </thead>
@@ -78,6 +80,9 @@ export default function SlotTable({
               >
                 {slot.availability ? "Available" : "Booked"}
               </span>
+            </td>
+            <td className="py-4 px-4 text-gray-600">
+              {formatNumber(slot.price, true)}
             </td>
             <td className="py-4 px-4">
               <div className="flex gap-2">

@@ -1,13 +1,14 @@
 "use client";
+import { PING_PERIOD } from "@/constants/app-constants";
 import { useAppContext } from "@/contexts/AppContext";
 import React, { useCallback, useEffect, useState } from "react";
 
 export default function Header() {
-  const { url, setEnvironment } = useAppContext();
+  const { url, environment, setEnvironment } = useAppContext();
 
   const [isActive, setIsActive] = useState<boolean>(false);
   const [selectedServer, setSelectedServer] = useState<"local" | "prod">(
-    "prod"
+    environment
   );
 
   const pingServer = useCallback(() => {
@@ -28,7 +29,7 @@ export default function Header() {
 
   useEffect(() => {
     pingServer();
-    const interval = setInterval(pingServer, 30000);
+    const interval = setInterval(pingServer, PING_PERIOD);
     return () => clearInterval(interval);
   }, [pingServer]);
 

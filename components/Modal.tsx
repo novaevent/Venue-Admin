@@ -93,6 +93,7 @@ export default function Modal({
       const requestData = {
         venue_id: formData.venue_id,
         label: formData.label,
+        price: formData.price,
         start_time: formData.start_time,
         end_time: formData.end_time,
         availability: formData.availability,
@@ -178,15 +179,6 @@ export default function Modal({
         payload.append("thumbnail_image", formData.thumbnail_image_file);
       }
 
-      const printFormDataAsJSON = (formData: FormData) => {
-        const obj: Record<string, any> = {};
-        formData.forEach((value, key) => {
-          obj[key] = value;
-        });
-        console.log(JSON.stringify(obj, null, 2));
-      };
-      printFormDataAsJSON(payload);
-
       const res = await fetch(`${url}/venue`, {
         method: "PUT",
         body: payload,
@@ -209,6 +201,7 @@ export default function Modal({
         slot_id: slotId,
         venue_id: formData.venue_id,
         label: formData.label,
+        price: formData.price,
         start_time: formData.start_time,
         end_time: formData.end_time,
         availability: formData.availability,

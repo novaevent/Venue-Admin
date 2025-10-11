@@ -20,6 +20,7 @@ export const SlotForm = ({
   const [formData, setFormData] = useState({
     venue_id: slot?.venue_id || "",
     label: slot?.label || "",
+    price: slot?.price || 0,
     start_time: slot?.start_time ? new Date(slot.start_time) : null,
     end_time: slot?.end_time ? new Date(slot.end_time) : null,
     availability: slot?.availability !== undefined ? slot.availability : true,
@@ -44,6 +45,7 @@ export const SlotForm = ({
     const valid =
       formData.venue_id &&
       formData.label.trim() !== "" &&
+      formData.price &&
       formData.start_time &&
       formData.end_time &&
       formData.end_time > formData.start_time;
@@ -140,6 +142,22 @@ export const SlotForm = ({
             className="p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
+      </div>
+
+      <div>
+        <label className="font-medium text-gray-700">Price</label>
+        <input
+          type="number"
+          placeholder="Price"
+          value={formData.price}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              price: Number(e.target.value),
+            })
+          }
+          className="w-full p-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
       </div>
 
       <label className="flex items-center gap-2">
