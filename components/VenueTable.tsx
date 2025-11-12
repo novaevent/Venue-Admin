@@ -45,6 +45,8 @@ export default function VenueTable({
         <tr className="bg-gray-50 text-left text-gray-700 uppercase text-sm font-semibold">
           <th className="py-3 px-4">Name</th>
           <th className="py-3 px-4">Location</th>
+          <th className ="py-3 px-4">Description</th>
+          <th className="py-3 px-4">Locality</th>
           <th className="py-3 px-4">Price</th>
           <th className="py-3 px-4">Capacity</th>
           <th className="py-3 px-4">Partnership Type</th>
@@ -57,10 +59,10 @@ export default function VenueTable({
             key={venue.venue_id}
             className="hover:bg-gray-50 transition-colors"
           >
-            <td className="py-4 px-4 font-medium text-gray-900">
-              {venue.name}
-            </td>
+            <td className="py-4 px-4 font-medium text-gray-900">{venue.name}</td>
             <td className="py-4 px-4 text-gray-600">{venue.location}</td>
+            <td className="py-4 px-4 text-gray-600">{venue.description}</td>
+            <td className="py-4 px-4 text-gray-600">{venue.locality}</td>
             <td className="py-4 px-4 text-gray-600">
               {formatNumber(venue.price, true)}
             </td>

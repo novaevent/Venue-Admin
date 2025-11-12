@@ -42,6 +42,7 @@ export default function Modal({
         price: Number(formData.price),
         location: formData.location,
         description: formData.description,
+        locality: formData.locality,
         partnership_type: formData?.partnership_type,
         seating_capacity: Number(formData.seating_capacity),
         parking_capacity: Number(formData.parking_capacity),
@@ -57,6 +58,7 @@ export default function Modal({
       payload.append("name", formData.name);
       payload.append("price", formData.price);
       payload.append("location", formData.location);
+      payload.append("locality", formData.locality);
       payload.append("description", formData.description);
       payload.append("partnership_type", formData.partnership_type);
       payload.append("seating_capacity", formData.seating_capacity);
@@ -146,6 +148,11 @@ export default function Modal({
         name: formData.name,
         price: Number(formData.price),
         location: formData.location,
+        address_line1: formData.address_line1,
+        address_line2: formData.address_line2,
+        address_line3: formData.address_line3,
+        locality: formData.locality,
+        pincode: formData.pincode,
         description: formData.description,
         partnership_type: formData?.partnership_type,
         seating_capacity: Number(formData.seating_capacity),
@@ -163,6 +170,11 @@ export default function Modal({
       payload.append("name", formData.name);
       payload.append("price", formData.price);
       payload.append("location", formData.location);
+      payload.append("address_line1", formData.address_line1);
+      payload.append("address_line2", formData.address_line2);
+      payload.append("address_line3", formData.address_line3);
+      payload.append("locality", formData.locality);
+      payload.append("pincode", formData.pincode);
       payload.append("description", formData.description);
       payload.append("partnership_type", formData.partnership_type);
       payload.append("seating_capacity", formData.seating_capacity);

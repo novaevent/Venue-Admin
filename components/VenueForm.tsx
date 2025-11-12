@@ -15,6 +15,11 @@ interface VenueFormData {
   price: string;
   partnership_type: string;
   location: string;
+  Address_line1: string;
+  Address_line2: string;
+  Address_line3: string;
+  Locality: string;
+  Pincode: string;
   description: string;
   seating_capacity: string;
   parking_capacity: string;
@@ -31,6 +36,11 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
     price: venue?.price || "",
     partnership_type: venue?.partnership_type || partnershipType.STANDARD,
     location: venue?.location || "",
+    Address_line1: venue?.address_line1 || "",
+    Address_line2: venue?.address_line2 || "",
+    Address_line3: venue?.address_line3 || "",
+    Locality: venue?.locality || "",
+    Pincode: venue?.pincode || "",
     description: venue?.description || "",
     seating_capacity: venue?.seating_capacity || "",
     parking_capacity: venue?.parking_capacity || "",
@@ -104,7 +114,41 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
         onChange={(e) => setFormData({ ...formData, location: e.target.value })}
         className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
       />
-
+            <input
+        type="text"
+        placeholder="Address Line 1"
+        value={formData.Address_line1}
+        onChange={(e) => setFormData({ ...formData, Address_line1: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
+            <input
+        type="text"
+        placeholder="Address Line 2"
+        value={formData.Address_line2}
+        onChange={(e) => setFormData({ ...formData, Address_line2: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
+            <input
+        type="text"
+        placeholder="Address Line 3"
+        value={formData.Address_line3}
+        onChange={(e) => setFormData({ ...formData, Address_line3: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
+            <input
+        type="text"
+        placeholder="Locality"
+        value={formData.Locality}
+        onChange={(e) => setFormData({ ...formData, Locality: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
+            <input
+        type="text"
+        placeholder="Pincode"
+        value={formData.Pincode}
+        onChange={(e) => setFormData({ ...formData, Pincode: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
       <textarea
         placeholder="Description"
         value={formData.description}
