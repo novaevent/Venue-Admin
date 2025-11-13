@@ -3,26 +3,29 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import "react-datepicker/dist/react-datepicker.css";
-import { Plus, MapPin, Clock, Star } from "lucide-react";
+import { Plus, MapPin, Clock, Star, CalendarCheck } from "lucide-react";
 import Modal from "@/components/Modal";
 import Header from "@/components/Header";
 import VenueTable from "@/components/VenueTable";
 import SlotTable from "@/components/SlotTable";
 import ScoresTable from "@/components/ScoresTable";
+import BookingsTable from "@/components/BookingTable";
 import { useAppContext } from "@/contexts/AppContext";
+
 
 const VenueAdminDashboard = () => {
   const { url } = useAppContext();
 
-  const [activeTab, setActiveTab] = useState<"venues" | "slots" | "scores">(
+  const [activeTab, setActiveTab] = useState<"venues" | "slots" | "scores" | "bookings">(
     "venues"
   );
   const [venues, setVenues] = useState<any>([]);
   const [slots, setSlots] = useState<any>([]);
   const [scores, setScores] = useState<any>([]);
+  const [bookings, setBookings] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [modalType, setModalType] = useState<"venue" | "slot" | "score">(
+  const [modalType, setModalType] = useState<"venue" | "slot" | "score" | "bookings" >(
     "venue"
   );
 
@@ -32,19 +35,22 @@ const VenueAdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [venuesRes, slotsRes, scoresRes] = await Promise.all([
+      const [venuesRes, slotsRes, scoresRes, bookingsRes] = await Promise.all([
         fetch(`${url}/venues`),
         fetch(`${url}/slot`),
         fetch(`${url}/score`),
+        fetch(`${url}/booking/details`),
       ]);
 
       const venuesData = await venuesRes.json();
       const slotsData = await slotsRes.json();
       const scoresData = await scoresRes.json();
+      const bookingsData = await bookingsRes.json();
 
       setVenues(venuesData.venues);
       setSlots(slotsData.slots || []);
       setScores(scoresData.scores || []);
+      setBookings(bookingsData || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -77,13 +83,14 @@ const VenueAdminDashboard = () => {
   };
 
   const tabs: {
-    key: "venues" | "slots" | "scores";
+    key: "venues" | "slots" | "scores" | "bookings";
     label: string;
     icon: any;
   }[] = [
     { key: "venues", label: "Venues", icon: MapPin },
     { key: "slots", label: "Time Slots", icon: Clock },
     { key: "scores", label: "Ratings", icon: Star },
+    { key: "bookings", label: "Bookings", icon: CalendarCheck },
   ];
 
   return (
@@ -98,7 +105,7 @@ const VenueAdminDashboard = () => {
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isDisabled =
-              (tab.key === "slots" || tab.key === "scores") &&
+              (tab.key === "slots" || tab.key === "scores" || tab.key === "bookings") &&
               (!venues || venues.length === 0);
             return (
               <button
@@ -140,8 +147,9 @@ const VenueAdminDashboard = () => {
             {activeTab === "venues" && "Venues"}
             {activeTab === "slots" && "Time Slots"}
             {activeTab === "scores" && "Ratings"}
+            {activeTab === "bookings" && "Bookings"}
           </h2>
-          <button
+          {activeTab!=="bookings" && <button
             onClick={() => openModal(activeTab.slice(0, -1))}
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
           >
@@ -152,7 +160,7 @@ const VenueAdminDashboard = () => {
               : activeTab === "slots"
               ? "Slot"
               : "Rating"}
-          </button>
+          </button>}
         </div>
 
         {/* Tables */}
@@ -183,6 +191,14 @@ const VenueAdminDashboard = () => {
               openModal={openModal}
             />
           )}
+          {/* Bookings */}
+          {activeTab === "bookings" && (
+            <BookingsTable
+              bookings={bookings}
+              setBookings={setBookings}
+              openModal={openModal}
+            />
+          )}
         </div>
       </div>
 
@@ -192,9 +208,11 @@ const VenueAdminDashboard = () => {
           venues={venues}
           slots={slots}
           scores={scores}
+          bookings={bookings}
           setVenues={setVenues}
           setSlots={setSlots}
           setScores={setScores}
+          setBookings={setBookings}
           onClose={closeModal}
           modalType={modalType}
           editingItem={editingItem}
