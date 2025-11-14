@@ -12,7 +12,7 @@ import { useAppContext } from "@/contexts/AppContext";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score";
+  modalType: "venue" | "slot" | "score" | "bookings";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -20,6 +20,8 @@ interface ModalProps {
   setSlots: Dispatch<SetStateAction<any>>;
   scores: any;
   setScores: Dispatch<SetStateAction<any>>;
+  bookings: any;
+  setBookings: Dispatch<SetStateAction<any>>;
 }
 
 export default function Modal({
