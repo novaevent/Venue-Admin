@@ -34,8 +34,8 @@ export default function BookingsTable({
         return;
       }
 
-      setBookings((prev) =>
-        prev.map((b) =>
+      setBookings((prev: any) =>
+        prev.map((b: any) =>
           b.booking_id === bookingId ? { ...b, status: newStatus } : b
         )
       );
