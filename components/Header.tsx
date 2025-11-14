@@ -14,11 +14,9 @@ export default function Header() {
   const pingServer = useCallback(() => {
     fetch(`${url}/ping`, { method: "HEAD" })
       .then((res) => {
-        console.log("Ping status:", res.status, res.ok);
         setIsActive(true);
       })
       .catch(() => {
-        console.log("Ping Failed!");
         setIsActive(false);
       });
   }, [url]);

@@ -12,22 +12,21 @@ import ScoresTable from "@/components/ScoresTable";
 import BookingsTable from "@/components/BookingTable";
 import { useAppContext } from "@/contexts/AppContext";
 
-
 const VenueAdminDashboard = () => {
   const { url } = useAppContext();
 
-  const [activeTab, setActiveTab] = useState<"venues" | "slots" | "scores" | "bookings">(
-    "venues"
-  );
+  const [activeTab, setActiveTab] = useState<
+    "venues" | "slots" | "scores" | "bookings"
+  >("venues");
   const [venues, setVenues] = useState<any>([]);
   const [slots, setSlots] = useState<any>([]);
   const [scores, setScores] = useState<any>([]);
   const [bookings, setBookings] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [modalType, setModalType] = useState<"venue" | "slot" | "score" | "bookings" >(
-    "venue"
-  );
+  const [modalType, setModalType] = useState<
+    "venue" | "slot" | "score" | "bookings"
+  >("venue");
 
   useEffect(() => {
     fetchData();
@@ -105,7 +104,9 @@ const VenueAdminDashboard = () => {
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isDisabled =
-              (tab.key === "slots" || tab.key === "scores" || tab.key === "bookings") &&
+              (tab.key === "slots" ||
+                tab.key === "scores" ||
+                tab.key === "bookings") &&
               (!venues || venues.length === 0);
             return (
               <button
@@ -149,18 +150,20 @@ const VenueAdminDashboard = () => {
             {activeTab === "scores" && "Ratings"}
             {activeTab === "bookings" && "Bookings"}
           </h2>
-          {activeTab!=="bookings" && <button
-            onClick={() => openModal(activeTab.slice(0, -1))}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            <Plus size={18} />
-            Add{" "}
-            {activeTab === "venues"
-              ? "Venue"
-              : activeTab === "slots"
-              ? "Slot"
-              : "Rating"}
-          </button>}
+          {activeTab !== "bookings" && (
+            <button
+              onClick={() => openModal(activeTab.slice(0, -1))}
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            >
+              <Plus size={18} />
+              Add{" "}
+              {activeTab === "venues"
+                ? "Venue"
+                : activeTab === "slots"
+                ? "Slot"
+                : "Rating"}
+            </button>
+          )}
         </div>
 
         {/* Tables */}
@@ -193,11 +196,7 @@ const VenueAdminDashboard = () => {
           )}
           {/* Bookings */}
           {activeTab === "bookings" && (
-            <BookingsTable
-              bookings={bookings}
-              setBookings={setBookings}
-              openModal={openModal}
-            />
+            <BookingsTable bookings={bookings} setBookings={setBookings} />
           )}
         </div>
       </div>

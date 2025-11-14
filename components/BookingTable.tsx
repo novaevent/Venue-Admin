@@ -7,15 +7,13 @@ import toast from "react-hot-toast";
 interface BookingsTableProps {
   bookings: any[];
   setBookings: Dispatch<SetStateAction<any>>;
-  venues: any[];
 }
 export default function BookingsTable({
   bookings,
   setBookings,
-  venues,
 }: BookingsTableProps) {
   const { url } = useAppContext();
-console.log("Bookings in BookingsTable:", bookings);
+
   const updateBookingStatus = async (bookingId: string, newStatus: string) => {
     const confirmed = window.confirm(
       `Are you sure you want to change the status to "${newStatus}"?`
@@ -31,7 +29,6 @@ console.log("Bookings in BookingsTable:", bookings);
           status: newStatus,
         }),
       });
-console.log({bookingId, newStatus});
       if (!res.ok) {
         toast.error("Something went wrong while updating status!");
         return;
@@ -69,8 +66,12 @@ console.log({bookingId, newStatus});
             key={booking.booking_id}
             className="hover:bg-gray-50 transition-colors"
           >
-            <td className="py-4 px-4 font-medium text-gray-900">{booking.name}</td>
-            <td className="py-4 px-4 text-gray-600">{formatDateTime(booking.start_time)}</td>
+            <td className="py-4 px-4 font-medium text-gray-900">
+              {booking.name}
+            </td>
+            <td className="py-4 px-4 text-gray-600">
+              {formatDateTime(booking.start_time)}
+            </td>
             <td className="py-4 px-4 text-gray-600">{booking.label}</td>
             <td className="py-4 px-4 text-gray-600">₹{booking.price}</td>
             <td className="py-4 px-4 text-gray-600">{booking.customer_name}</td>
