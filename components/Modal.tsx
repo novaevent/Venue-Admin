@@ -75,11 +75,11 @@ export default function Modal({
       );
       payload.append("room_capacity", formData.room_capacity);
       payload.append("floating_capacity", formData.floating_capacity);
-      payload.append("address_line_1", formData.name);
-      payload.append("address_line_2", formData.name);
-      payload.append("address_line_3", formData.name);
-      payload.append("locality", formData.name);
-      payload.append("pincode", formData.name);
+      payload.append("address_line_1", formData.address_line_1);
+      payload.append("address_line_2", formData.address_line_2);
+      payload.append("address_line_3", formData.address_line_3);
+      payload.append("locality", formData.locality);
+      payload.append("pincode", formData.pincode);
       if (formData.thumbnail_image_file) {
         payload.append("thumbnail_image", formData.thumbnail_image_file);
       }
@@ -157,9 +157,9 @@ export default function Modal({
         name: formData.name,
         price: Number(formData.price),
         location: formData.location,
-        address_line1: formData.address_line1,
-        address_line2: formData.address_line2,
-        address_line3: formData.address_line3,
+        address_line1: formData.address_line_1,
+        address_line2: formData.address_line_2,
+        address_line3: formData.address_line_3,
         locality: formData.locality,
         pincode: formData.pincode,
         description: formData.description,
@@ -179,9 +179,9 @@ export default function Modal({
       payload.append("name", formData.name);
       payload.append("price", formData.price);
       payload.append("location", formData.location);
-      payload.append("address_line_1", formData.address_line1);
-      payload.append("address_line_2", formData.address_line2);
-      payload.append("address_line_3", formData.address_line3);
+      payload.append("address_line_1", formData.address_line_1);
+      payload.append("address_line_2", formData.address_line_2);
+      payload.append("address_line_3", formData.address_line_3);
       payload.append("locality", formData.locality);
       payload.append("pincode", formData.pincode);
       payload.append("description", formData.description);
