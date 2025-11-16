@@ -8,11 +8,12 @@ import { X } from "lucide-react";
 import { VenueForm } from "./VenueForm";
 import { SlotForm } from "./SlotForm";
 import { ScoreForm } from "./ScoreForm";
+import VenueFacilities from "./VenueFacilities";
 import { useAppContext } from "@/contexts/AppContext";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score";
+  modalType: "venue" | "slot" | "score" | "facilities";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -264,11 +265,23 @@ export default function Modal({
       console.error("Error updating score:", err);
     }
   };
+return (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    
+    {/* Facilities modal (direct render) */}
+    {modalType === "facilities" && (
+      <VenueFacilities
+        venue={editingItem}
+        url={url}
+        close={onClose}
+      />
+    )}
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    {/* Standard modal */}
+    {modalType !== "facilities" && (
       <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        {/* Modal Header */}
+        
+        {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <h3 className="text-2xl font-bold text-gray-900">
             {editingItem ? "Edit" : "Add"}{" "}
@@ -276,29 +289,28 @@ export default function Modal({
               ? "Venue"
               : modalType === "slot"
               ? "Time Slot"
-              : "Rating"}
+              : modalType === "score"
+              ? "Rating"
+              : ""}
           </h3>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-900 transition-colors"
-          >
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-900 transition-colors">
             <X size={24} />
           </button>
         </div>
 
-        {/* Modal Content */}
+        {/* Content */}
         <div className="p-6">
           {modalType === "venue" && (
             <VenueForm
               venue={editingItem}
               onSave={(data) => {
-                if (editingItem?.venue_id)
-                  updateVenue(editingItem.venue_id, data);
+                if (editingItem?.venue_id) updateVenue(editingItem.venue_id, data);
                 else addVenue(data);
               }}
               onClose={onClose}
             />
           )}
+
           {modalType === "slot" && (
             <SlotForm
               slot={editingItem}
@@ -310,13 +322,13 @@ export default function Modal({
               }}
             />
           )}
+
           {modalType === "score" && (
             <ScoreForm
               score={editingItem}
               venues={venues}
               onSave={(data) => {
-                if (editingItem?.rating_id)
-                  updateScore(editingItem.rating_id, data);
+                if (editingItem?.rating_id) updateScore(editingItem.rating_id, data);
                 else addScore(data);
               }}
               onClose={onClose}
@@ -324,6 +336,7 @@ export default function Modal({
           )}
         </div>
       </div>
-    </div>
-  );
+    )}
+  </div>  
+);
 }
