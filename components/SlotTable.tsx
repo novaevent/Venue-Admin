@@ -81,7 +81,9 @@ export default function SlotTable({
     }
   }, [slots]);
 
+  // @ts-expect-error suppress ref type mismatch
   useClickOutside(venueRef, () => setShowSuggestions(false));
+  // @ts-expect-error suppress ref type mismatch
   useClickOutside(calendarRef, () => {
     if (showCalendar) {
       setShowCalendar(false);
@@ -101,7 +103,7 @@ export default function SlotTable({
         body: JSON.stringify({ slot_id: slotId }),
       });
       if (!res.ok) toast.error("Something went wrong while deleting Slots!");
-      setSlots((prev) => prev.filter((s) => s.slot_id !== slotId));
+      setSlots((prev: any) => prev.filter((s: any) => s.slot_id !== slotId));
       setOriginalSlots((prev) => prev.filter((s) => s.slot_id !== slotId));
       setFilteredSlots((prev) => prev.filter((s) => s.slot_id !== slotId));
     } catch (err) {
@@ -281,10 +283,17 @@ export default function SlotTable({
           {showCalendar && (
             <div className="absolute mt-2 z-50 bg-white shadow-xl rounded-xl">
               <DateRange
-                editableDateInputs={true}
                 moveRangeOnFirstSelection={false}
-                ranges={dateRange}
-                minDate={new Date()}
+                ranges={[
+                  {
+                    startDate: dateRange[0].startDate || new Date(),
+                    endDate:
+                      dateRange[0].endDate ||
+                      dateRange[0].startDate ||
+                      new Date(),
+                    key: "selection",
+                  },
+                ]}
                 onChange={(item: any) => {
                   const { startDate, endDate } = item.selection;
 
@@ -294,23 +303,22 @@ export default function SlotTable({
                       { startDate, endDate: null, key: "selection" },
                     ]);
                     setSelectionStarted(true);
-                  } else {
-                    const finalEndDate = endDate || startRef.current;
-                    setDateRange([
-                      {
-                        startDate: startRef.current,
-                        endDate: finalEndDate,
-                        key: "selection",
-                      },
-                    ]);
-                    setSelectionStarted(false);
-                    setShowCalendar(false);
-                    console.log("Second click - full range stored:", {
-                      start: startRef.current,
-                      end: finalEndDate,
-                    });
-                    startRef.current = null;
+                    return;
                   }
+
+                  const finalEndDate = endDate || startRef.current;
+
+                  setDateRange([
+                    {
+                      startDate: startRef.current,
+                      endDate: finalEndDate,
+                      key: "selection",
+                    },
+                  ]);
+
+                  setSelectionStarted(false);
+                  setShowCalendar(false);
+                  startRef.current = null;
                 }}
               />
             </div>
