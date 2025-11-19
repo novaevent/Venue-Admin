@@ -54,7 +54,6 @@ export default function Header() {
                 setSelectedServer(e.target.value as "local" | "prod")
               }
               className="border rounded px-3 py-2 text-gray-900"
-              defaultValue={selectedServer}
             >
               <option value="prod" className="text-gray-900">
                 Production
