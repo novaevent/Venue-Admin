@@ -14,11 +14,9 @@ export default function Header() {
   const pingServer = useCallback(() => {
     fetch(`${url}/ping`, { method: "HEAD" })
       .then((res) => {
-        console.log("Ping status:", res.status, res.ok);
         setIsActive(true);
       })
       .catch(() => {
-        console.log("Ping Failed!");
         setIsActive(false);
       });
   }, [url]);
@@ -38,7 +36,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 py-6 flex flex-row justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold text-gray-900 tracking-wide">
-            Nova Admin
+            Gathr Dashboard
           </h1>
           <p className="text-gray-600 mt-1">
             Manage venues, time slots, and ratings effortlessly
@@ -56,7 +54,6 @@ export default function Header() {
                 setSelectedServer(e.target.value as "local" | "prod")
               }
               className="border rounded px-3 py-2 text-gray-900"
-              defaultValue={selectedServer}
             >
               <option value="prod" className="text-gray-900">
                 Production

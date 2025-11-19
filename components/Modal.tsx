@@ -13,7 +13,7 @@ import { useAppContext } from "@/contexts/AppContext";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score" | "facilities";
+  modalType: "venue" | "slot" | "score" | "bookings" | "facilities";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -21,6 +21,8 @@ interface ModalProps {
   setSlots: Dispatch<SetStateAction<any>>;
   scores: any;
   setScores: Dispatch<SetStateAction<any>>;
+  bookings: any;
+  setBookings: Dispatch<SetStateAction<any>>;
 }
 
 export default function Modal({
@@ -44,6 +46,9 @@ export default function Modal({
         location: formData.location,
         description: formData.description,
         locality: formData.locality,
+        address_line_1: formData.address_line_1,
+        address_line_2: formData.address_line_2,
+        address_line_3: formData.address_line_3,
         partnership_type: formData?.partnership_type,
         seating_capacity: Number(formData.seating_capacity),
         parking_capacity: Number(formData.parking_capacity),
@@ -71,7 +76,11 @@ export default function Modal({
       );
       payload.append("room_capacity", formData.room_capacity);
       payload.append("floating_capacity", formData.floating_capacity);
-
+      payload.append("address_line_1", formData.address_line_1);
+      payload.append("address_line_2", formData.address_line_2);
+      payload.append("address_line_3", formData.address_line_3);
+      payload.append("locality", formData.locality);
+      payload.append("pincode", formData.pincode);
       if (formData.thumbnail_image_file) {
         payload.append("thumbnail_image", formData.thumbnail_image_file);
       }
@@ -149,9 +158,9 @@ export default function Modal({
         name: formData.name,
         price: Number(formData.price),
         location: formData.location,
-        address_line1: formData.address_line1,
-        address_line2: formData.address_line2,
-        address_line3: formData.address_line3,
+        address_line_1: formData.address_line_1,
+        address_line_2: formData.address_line_2,
+        address_line_3: formData.address_line_3,
         locality: formData.locality,
         pincode: formData.pincode,
         description: formData.description,
@@ -171,9 +180,9 @@ export default function Modal({
       payload.append("name", formData.name);
       payload.append("price", formData.price);
       payload.append("location", formData.location);
-      payload.append("address_line1", formData.address_line1);
-      payload.append("address_line2", formData.address_line2);
-      payload.append("address_line3", formData.address_line3);
+      payload.append("address_line_1", formData.address_line_1);
+      payload.append("address_line_2", formData.address_line_2);
+      payload.append("address_line_3", formData.address_line_3);
       payload.append("locality", formData.locality);
       payload.append("pincode", formData.pincode);
       payload.append("description", formData.description);
@@ -265,78 +274,78 @@ export default function Modal({
       console.error("Error updating score:", err);
     }
   };
-return (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    
-    {/* Facilities modal (direct render) */}
-    {modalType === "facilities" && (
-      <VenueFacilities
-        venue={editingItem}
-        url={url}
-        close={onClose}
-      />
-    )}
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      {/* Facilities modal (direct render) */}
+      {modalType === "facilities" && (
+        <VenueFacilities venue={editingItem} url={url} close={onClose} />
+      )}
 
-    {/* Standard modal */}
-    {modalType !== "facilities" && (
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h3 className="text-2xl font-bold text-gray-900">
-            {editingItem ? "Edit" : "Add"}{" "}
-            {modalType === "venue"
-              ? "Venue"
-              : modalType === "slot"
-              ? "Time Slot"
-              : modalType === "score"
-              ? "Rating"
-              : ""}
-          </h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-900 transition-colors">
-            <X size={24} />
-          </button>
+      {/* Standard modal */}
+      {modalType !== "facilities" && (
+        <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 className="text-2xl font-bold text-gray-900">
+              {editingItem ? "Edit" : "Add"}{" "}
+              {modalType === "venue"
+                ? "Venue"
+                : modalType === "slot"
+                ? "Time Slot"
+                : modalType === "score"
+                ? "Rating"
+                : ""}
+            </h3>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            {modalType === "venue" && (
+              <VenueForm
+                venue={editingItem}
+                onSave={(data) => {
+                  if (editingItem?.venue_id)
+                    updateVenue(editingItem.venue_id, data);
+                  else addVenue(data);
+                }}
+                onClose={onClose}
+              />
+            )}
+
+            {modalType === "slot" && (
+              <SlotForm
+                slot={editingItem}
+                venues={venues}
+                closeModal={onClose}
+                onSave={(data) => {
+                  if (editingItem?.slot_id)
+                    updateSlot(editingItem.slot_id, data);
+                  else addSlot(data);
+                }}
+              />
+            )}
+
+            {modalType === "score" && (
+              <ScoreForm
+                score={editingItem}
+                venues={venues}
+                onSave={(data) => {
+                  if (editingItem?.rating_id)
+                    updateScore(editingItem.rating_id, data);
+                  else addScore(data);
+                }}
+                onClose={onClose}
+              />
+            )}
+          </div>
         </div>
-
-        {/* Content */}
-        <div className="p-6">
-          {modalType === "venue" && (
-            <VenueForm
-              venue={editingItem}
-              onSave={(data) => {
-                if (editingItem?.venue_id) updateVenue(editingItem.venue_id, data);
-                else addVenue(data);
-              }}
-              onClose={onClose}
-            />
-          )}
-
-          {modalType === "slot" && (
-            <SlotForm
-              slot={editingItem}
-              venues={venues}
-              closeModal={onClose}
-              onSave={(data) => {
-                if (editingItem?.slot_id) updateSlot(editingItem.slot_id, data);
-                else addSlot(data);
-              }}
-            />
-          )}
-
-          {modalType === "score" && (
-            <ScoreForm
-              score={editingItem}
-              venues={venues}
-              onSave={(data) => {
-                if (editingItem?.rating_id) updateScore(editingItem.rating_id, data);
-                else addScore(data);
-              }}
-              onClose={onClose}
-            />
-          )}
-        </div>
-      </div>
-    )}
-  </div>  
-);
+      )}
+    </div>
+  );
 }
