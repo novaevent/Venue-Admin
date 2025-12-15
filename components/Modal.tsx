@@ -8,12 +8,13 @@ import { X } from "lucide-react";
 import { VenueForm } from "./VenueForm";
 import { SlotForm } from "./SlotForm";
 import { ScoreForm } from "./ScoreForm";
+import VenueImagesModal from "./VenueImagesModal";
 import VenueFacilities from "./VenueFacilities";
 import { useAppContext } from "@/contexts/AppContext";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score" | "facilities";
+  modalType: "venue" | "slot" | "score" | "facilities" | "images";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -267,7 +268,7 @@ export default function Modal({
   };
 return (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    
+
     {/* Facilities modal (direct render) */}
     {modalType === "facilities" && (
       <VenueFacilities
@@ -277,10 +278,18 @@ return (
       />
     )}
 
+    {/* Images modal (direct render) */}
+    {modalType === "images" && (
+      <VenueImagesModal
+        venue={editingItem}
+        onClose={onClose}
+      />
+    )}
+
     {/* Standard modal */}
-    {modalType !== "facilities" && (
+    {modalType !== "facilities" && modalType !== "images" && (
       <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        
+
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <h3 className="text-2xl font-bold text-gray-900">
@@ -293,7 +302,10 @@ return (
               ? "Rating"
               : ""}
           </h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-900 transition-colors">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-900 transition-colors"
+          >
             <X size={24} />
           </button>
         </div>
@@ -304,7 +316,8 @@ return (
             <VenueForm
               venue={editingItem}
               onSave={(data) => {
-                if (editingItem?.venue_id) updateVenue(editingItem.venue_id, data);
+                if (editingItem?.venue_id)
+                  updateVenue(editingItem.venue_id, data);
                 else addVenue(data);
               }}
               onClose={onClose}
@@ -317,7 +330,8 @@ return (
               venues={venues}
               closeModal={onClose}
               onSave={(data) => {
-                if (editingItem?.slot_id) updateSlot(editingItem.slot_id, data);
+                if (editingItem?.slot_id)
+                  updateSlot(editingItem.slot_id, data);
                 else addSlot(data);
               }}
             />
@@ -328,7 +342,8 @@ return (
               score={editingItem}
               venues={venues}
               onSave={(data) => {
-                if (editingItem?.rating_id) updateScore(editingItem.rating_id, data);
+                if (editingItem?.rating_id)
+                  updateScore(editingItem.rating_id, data);
                 else addScore(data);
               }}
               onClose={onClose}
@@ -337,6 +352,6 @@ return (
         </div>
       </div>
     )}
-  </div>  
+  </div>
 );
 }

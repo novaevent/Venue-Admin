@@ -1,6 +1,6 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { formatNumber } from "@/utils/number-utils";
-import { Edit, Trash2 , ListPlus} from "lucide-react";
+import { Edit, Trash2 , ListPlus, ImagePlus} from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 
@@ -50,7 +50,7 @@ export default function VenueTable({
           <th className="py-3 px-4">Price</th>
           <th className="py-3 px-4">Capacity</th>
           <th className="py-3 px-4">Partnership Type</th>
-          <th className="py-3 px-4">Actions</th>
+          <th className="py-3 px-4"> Actions </th>
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-100">
@@ -91,6 +91,12 @@ export default function VenueTable({
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                 >
                   < ListPlus size={16} />
+                </button>
+                <button
+                  onClick={() => openModal("images", venue)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                >
+                  < ImagePlus size={16} />
                 </button>
               </div>
             </td>
