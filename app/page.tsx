@@ -140,7 +140,7 @@ const VenueAdminDashboard = () => {
         </div>
       </div>
 
-      {/* Content Box */}
+      {/* Content Box - */}
       <div className="max-w-7xl mx-auto rounded-xl shadow-md overflow-hidden">
         {/* Table Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
