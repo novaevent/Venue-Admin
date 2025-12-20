@@ -10,10 +10,11 @@ import { SlotForm } from "./SlotForm";
 import { ScoreForm } from "./ScoreForm";
 import VenueFacilities from "./VenueFacilities";
 import { useAppContext } from "@/contexts/AppContext";
+import VenueImagesModal from "./VenueImagesModal";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score" | "bookings" | "facilities";
+  modalType: "venue" | "slot" | "score" | "bookings" | "facilities" | "images";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -281,8 +282,13 @@ export default function Modal({
         <VenueFacilities venue={editingItem} url={url} close={onClose} />
       )}
 
+      {/* Images modal (direct render) */}
+      {modalType === "images" && (
+        <VenueImagesModal venue={editingItem} onClose={onClose} />
+      )}
+
       {/* Standard modal */}
-      {modalType !== "facilities" && (
+      {modalType !== "facilities" && modalType !== "images" && (
         <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
           {/* Header */}
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
