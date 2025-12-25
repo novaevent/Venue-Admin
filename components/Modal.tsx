@@ -14,7 +14,7 @@ import VenueImagesModal from "./VenueImagesModal";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score" | "bookings" | "facilities" | "images"  | "Website Bookings";
+  modalType: "venue" | "slot" | "score" | "bookings" | "facilities" | "images"  | "websiteBookings";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;

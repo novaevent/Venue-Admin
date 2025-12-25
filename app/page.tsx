@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-// import "react-datepicker/dist/react-datepicker.css";
 import { Plus, MapPin, Clock, Star, CalendarCheck } from "lucide-react";
 import Modal from "@/components/Modal";
 import Header from "@/components/Header";
@@ -16,7 +15,7 @@ const VenueAdminDashboard = () => {
   const { url } = useAppContext();
 
   const [activeTab, setActiveTab] = useState<
-    "venues" | "slots" | "scores" | "bookings" | "Website Bookings"
+    "venues" | "slots" | "scores" | "bookings" | "websiteBookings"
   >("venues");
   const [venues, setVenues] = useState<any>([]);
   const [slots, setSlots] = useState<any>([]);
@@ -26,7 +25,7 @@ const VenueAdminDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [modalType, setModalType] = useState<
-    "venue" | "slot" | "score" | "bookings" | "Website Bookings"
+    "venue" | "slot" | "score" | "bookings" | "websiteBookings"
   >("venue");
 
   useEffect(() => {
@@ -86,16 +85,16 @@ const VenueAdminDashboard = () => {
   };
 
   const tabs: {
-    key: "venues" | "slots" | "scores" | "bookings" | "Website Bookings";
+    key: "venues" | "slots" | "scores" | "bookings" | "websiteBookings";
     label: string;
     icon: any;
   }[] = [
-    { key: "venues", label: "Venues", icon: MapPin },
-    { key: "slots", label: "Time Slots", icon: Clock },
-    { key: "scores", label: "Ratings", icon: Star },
-    { key: "bookings", label: "Bookings", icon: CalendarCheck },
-    { key: "Website Bookings", label: "Website Bookings", icon: CalendarCheck },
-  ];
+      { key: "venues", label: "Venues", icon: MapPin },
+      { key: "slots", label: "Time Slots", icon: Clock },
+      { key: "scores", label: "Ratings", icon: Star },
+      { key: "bookings", label: "Bookings", icon: CalendarCheck },
+      { key: "websiteBookings", label: "Website Bookings", icon: CalendarCheck },
+    ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -112,7 +111,7 @@ const VenueAdminDashboard = () => {
               (tab.key === "slots" ||
                 tab.key === "scores" ||
                 tab.key === "bookings" ||
-                tab.key === "Website Bookings" ) &&
+                tab.key === "websiteBookings") &&
               (!venues || venues.length === 0);
             return (
               <button
@@ -125,16 +124,14 @@ const VenueAdminDashboard = () => {
                   setActiveTab(tab.key); // ✅ TS safe
                 }}
                 className={`flex items-center gap-2 px-5 py-2 rounded-full font-medium transition-all duration-300
-            ${
-              activeTab === tab.key
-                ? "bg-white text-blue-600 shadow-md scale-105"
-                : "text-gray-600 hover:text-gray-900"
-            }
-            ${
-              isDisabled
-                ? "cursor-not-allowed opacity-50 hover:text-gray-600"
-                : ""
-            }
+            ${activeTab === tab.key
+                    ? "bg-white text-blue-600 shadow-md scale-105"
+                    : "text-gray-600 hover:text-gray-900"
+                  }
+            ${isDisabled
+                    ? "cursor-not-allowed opacity-50 hover:text-gray-600"
+                    : ""
+                  }
           `}
                 disabled={isDisabled}
               >
@@ -155,19 +152,19 @@ const VenueAdminDashboard = () => {
             {activeTab === "slots" && "Time Slots"}
             {activeTab === "scores" && "Ratings"}
             {activeTab === "bookings" && "Bookings"}
-            {activeTab === "Website Bookings" && "Website Bookings"}
+            {activeTab === "websiteBookings" && "Website Bookings"}
           </h2>
-          {(activeTab !== "bookings" && activeTab !== "Website Bookings") && (
+          {(activeTab !== "bookings" && activeTab !== "websiteBookings") && (
             <button
               onClick={() => {
-  const typeMap: Record<string, "venue" | "slot" | "score"> = {
-    venues: "venue",
-    slots: "slot",
-    scores: "score",
-  };
+                const typeMap: Record<string, "venue" | "slot" | "score"> = {
+                  venues: "venue",
+                  slots: "slot",
+                  scores: "score",
+                };
 
-  openModal(typeMap[activeTab]);
-}}
+                openModal(typeMap[activeTab]);
+              }}
               className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
             >
               <Plus size={18} />
@@ -175,8 +172,8 @@ const VenueAdminDashboard = () => {
               {activeTab === "venues"
                 ? "Venue"
                 : activeTab === "slots"
-                ? "Slot"
-                : "Rating"}
+                  ? "Slot"
+                  : "Rating"}
             </button>
           )}
         </div>
@@ -215,9 +212,9 @@ const VenueAdminDashboard = () => {
           )}
           {/* Website Bookings */}
           {
-            activeTab === "Website Bookings" && (
+            activeTab === "websiteBookings" && (
               <BookingsTable bookings={websiteBookings} setBookings={setWebsiteBookings} />
-            )     
+            )
           }
         </div>
       </div>
