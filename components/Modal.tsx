@@ -14,7 +14,7 @@ import VenueImagesModal from "./VenueImagesModal";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score" | "bookings" | "facilities" | "images";
+  modalType: "venue" | "slot" | "score" | "bookings" | "facilities" | "images"  | "Website Bookings";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -24,6 +24,8 @@ interface ModalProps {
   setScores: Dispatch<SetStateAction<any>>;
   bookings: any;
   setBookings: Dispatch<SetStateAction<any>>;
+  websiteBookings: any;
+  setWebsiteBookings: Dispatch<SetStateAction<any>>;
 }
 
 export default function Modal({
@@ -71,9 +73,7 @@ export default function Modal({
       payload.append("seating_capacity", formData.seating_capacity);
       payload.append("parking_capacity", formData.parking_capacity);
       payload.append("hall_seating_capacity", formData.hall_seating_capacity);
-      payload.append(
-        "dining_seating_capacity",
-        formData.dining_seating_capacity
+      payload.append("dining_seating_capacity",formData.dining_seating_capacity
       );
       payload.append("room_capacity", formData.room_capacity);
       payload.append("floating_capacity", formData.floating_capacity);

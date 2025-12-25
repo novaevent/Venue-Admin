@@ -28,6 +28,8 @@ interface VenueFormData {
   room_capacity: string;
   floating_capacity: string;
   thumbnail_image_file?: File;
+  latitude?: string;
+  longitude?: string;
 }
 
 export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
@@ -49,6 +51,8 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
     room_capacity: venue?.room_capacity || "",
     floating_capacity: venue?.floating_capacity || "",
     thumbnail_image_file: undefined,
+    latitude: venue?.latitude || "",
+    longitude: venue?.longitude || "",
   });
 
   const [isValid, setIsValid] = useState(false);
@@ -153,6 +157,20 @@ export const VenueForm = ({ venue, onSave, onClose }: VenueFormProps) => {
         placeholder="Pincode"
         value={formData.pincode}
         onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
+      <input
+        type="text"
+        placeholder="Latitude"
+        value={formData.latitude}
+        onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+        className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+      />
+      <input
+        type="text"
+        placeholder="Longitude"
+        value={formData.longitude}
+        onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
         className="w-full p-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
       />
       <textarea

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
 import { Plus, MapPin, Clock, Star, CalendarCheck } from "lucide-react";
 import Modal from "@/components/Modal";
 import Header from "@/components/Header";
@@ -16,16 +16,17 @@ const VenueAdminDashboard = () => {
   const { url } = useAppContext();
 
   const [activeTab, setActiveTab] = useState<
-    "venues" | "slots" | "scores" | "bookings"
+    "venues" | "slots" | "scores" | "bookings" | "Website Bookings"
   >("venues");
   const [venues, setVenues] = useState<any>([]);
   const [slots, setSlots] = useState<any>([]);
   const [scores, setScores] = useState<any>([]);
   const [bookings, setBookings] = useState<any>([]);
+  const [websiteBookings, setWebsiteBookings] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [modalType, setModalType] = useState<
-    "venue" | "slot" | "score" | "bookings"
+    "venue" | "slot" | "score" | "bookings" | "Website Bookings"
   >("venue");
 
   useEffect(() => {
@@ -34,22 +35,25 @@ const VenueAdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [venuesRes, slotsRes, scoresRes, bookingsRes] = await Promise.all([
+      const [venuesRes, slotsRes, scoresRes, bookingsRes, websitebookingRes] = await Promise.all([
         fetch(`${url}/venues`),
         fetch(`${url}/slot`),
         fetch(`${url}/score`),
         fetch(`${url}/booking/details`),
+        fetch(`${url}/online/booking/details`)
       ]);
 
       const venuesData = await venuesRes.json();
       const slotsData = await slotsRes.json();
       const scoresData = await scoresRes.json();
       const bookingsData = await bookingsRes.json();
+      const websiteBookingsData = await websitebookingRes.json();
 
       setVenues(venuesData.venues);
       setSlots(slotsData.slots || []);
       setScores(scoresData.scores || []);
       setBookings(bookingsData || []);
+      setWebsiteBookings(websiteBookingsData || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -82,7 +86,7 @@ const VenueAdminDashboard = () => {
   };
 
   const tabs: {
-    key: "venues" | "slots" | "scores" | "bookings";
+    key: "venues" | "slots" | "scores" | "bookings" | "Website Bookings";
     label: string;
     icon: any;
   }[] = [
@@ -90,6 +94,7 @@ const VenueAdminDashboard = () => {
     { key: "slots", label: "Time Slots", icon: Clock },
     { key: "scores", label: "Ratings", icon: Star },
     { key: "bookings", label: "Bookings", icon: CalendarCheck },
+    { key: "Website Bookings", label: "Website Bookings", icon: CalendarCheck },
   ];
 
   return (
@@ -106,7 +111,8 @@ const VenueAdminDashboard = () => {
             const isDisabled =
               (tab.key === "slots" ||
                 tab.key === "scores" ||
-                tab.key === "bookings") &&
+                tab.key === "bookings" ||
+                tab.key === "Website Bookings" ) &&
               (!venues || venues.length === 0);
             return (
               <button
@@ -149,10 +155,19 @@ const VenueAdminDashboard = () => {
             {activeTab === "slots" && "Time Slots"}
             {activeTab === "scores" && "Ratings"}
             {activeTab === "bookings" && "Bookings"}
+            {activeTab === "Website Bookings" && "Website Bookings"}
           </h2>
-          {activeTab !== "bookings" && (
+          {(activeTab !== "bookings" && activeTab !== "Website Bookings") && (
             <button
-              onClick={() => openModal(activeTab.slice(0, -1))}
+              onClick={() => {
+  const typeMap: Record<string, "venue" | "slot" | "score"> = {
+    venues: "venue",
+    slots: "slot",
+    scores: "score",
+  };
+
+  openModal(typeMap[activeTab]);
+}}
               className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
             >
               <Plus size={18} />
@@ -198,6 +213,12 @@ const VenueAdminDashboard = () => {
           {activeTab === "bookings" && (
             <BookingsTable bookings={bookings} setBookings={setBookings} />
           )}
+          {/* Website Bookings */}
+          {
+            activeTab === "Website Bookings" && (
+              <BookingsTable bookings={websiteBookings} setBookings={setWebsiteBookings} />
+            )     
+          }
         </div>
       </div>
 
@@ -208,10 +229,12 @@ const VenueAdminDashboard = () => {
           slots={slots}
           scores={scores}
           bookings={bookings}
+          websiteBookings={websiteBookings}
           setVenues={setVenues}
           setSlots={setSlots}
           setScores={setScores}
           setBookings={setBookings}
+          setWebsiteBookings={setWebsiteBookings}
           onClose={closeModal}
           modalType={modalType}
           editingItem={editingItem}
