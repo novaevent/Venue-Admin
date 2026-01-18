@@ -15,8 +15,6 @@ export default function VenueImagesModal({ venue, onClose }: Props) {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
   const venueId = venue.venue_id;
-  console.log("Venue ID:", venueId);
-
 
   // 🔹 Fetch images
   const fetchImages = async () => {
@@ -42,18 +40,15 @@ export default function VenueImagesModal({ venue, onClose }: Props) {
 
     const formData = new FormData();
     Array.from(selectedFiles).forEach((file) =>
-      formData.append("images", file)
+      formData.append("images", file),
     );
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${url}/venues/${venueId}/images`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch(`${url}/venues/${venueId}/images`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!res.ok) throw new Error();
       toast.success("Images uploaded");
@@ -69,14 +64,11 @@ export default function VenueImagesModal({ venue, onClose }: Props) {
   // 🔹 Delete images (multiple)
   const deleteImages = async (fileNames: string[]) => {
     try {
-      const res = await fetch(
-        `${url}/venues/${venueId}/images`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileNames }),
-        }
-      );
+      const res = await fetch(`${url}/venues/${venueId}/images`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileNames }),
+      });
 
       if (!res.ok) throw new Error();
       toast.success("Image deleted");
@@ -93,7 +85,9 @@ export default function VenueImagesModal({ venue, onClose }: Props) {
           <h2 className="text-lg font-semibold text-gray-800">
             Images – {venue.name}
           </h2>
-          <button onClick={onClose} className="text-gray-500">✕</button>
+          <button onClick={onClose} className="text-gray-500">
+            ✕
+          </button>
         </div>
 
         {/* Upload Section */}
@@ -144,11 +138,7 @@ export default function VenueImagesModal({ venue, onClose }: Props) {
                   key={img}
                   className="relative group border rounded overflow-hidden"
                 >
-                  <img
-                    src={img}
-                    alt=""
-                    className="w-full h-40 object-cover"
-                  />
+                  <img src={img} alt="" className="w-full h-40 object-cover" />
                   <button
                     onClick={() => deleteImages([fileName])}
                     className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"

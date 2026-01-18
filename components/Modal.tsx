@@ -14,7 +14,14 @@ import VenueImagesModal from "./VenueImagesModal";
 
 interface ModalProps {
   editingItem: any;
-  modalType: "venue" | "slot" | "score" | "bookings" | "facilities" | "images"  | "Website Bookings";
+  modalType:
+    | "venue"
+    | "slot"
+    | "score"
+    | "bookings"
+    | "facilities"
+    | "images"
+    | "Website Bookings";
   onClose: () => void;
   venues: any;
   setVenues: Dispatch<SetStateAction<any>>;
@@ -67,13 +74,14 @@ export default function Modal({
       payload.append("name", formData.name);
       payload.append("price", formData.price);
       payload.append("location", formData.location);
-      payload.append("locality", formData.locality);
       payload.append("description", formData.description);
       payload.append("partnership_type", formData.partnership_type);
       payload.append("seating_capacity", formData.seating_capacity);
       payload.append("parking_capacity", formData.parking_capacity);
       payload.append("hall_seating_capacity", formData.hall_seating_capacity);
-      payload.append("dining_seating_capacity",formData.dining_seating_capacity
+      payload.append(
+        "dining_seating_capacity",
+        formData.dining_seating_capacity,
       );
       payload.append("room_capacity", formData.room_capacity);
       payload.append("floating_capacity", formData.floating_capacity);
@@ -82,6 +90,8 @@ export default function Modal({
       payload.append("address_line_3", formData.address_line_3);
       payload.append("locality", formData.locality);
       payload.append("pincode", formData.pincode);
+      payload.append("latitude", formData.latitude);
+      payload.append("longitude", formData.longitude);
       if (formData.thumbnail_image_file) {
         payload.append("thumbnail_image", formData.thumbnail_image_file);
       }
@@ -193,10 +203,12 @@ export default function Modal({
       payload.append("hall_seating_capacity", formData.hall_seating_capacity);
       payload.append(
         "dining_seating_capacity",
-        formData.dining_seating_capacity
+        formData.dining_seating_capacity,
       );
       payload.append("room_capacity", formData.room_capacity);
       payload.append("floating_capacity", formData.floating_capacity);
+      payload.append("latitude", formData.latitude);
+      payload.append("longitude", formData.longitude);
 
       if (formData.thumbnail_image_file) {
         payload.append("thumbnail_image", formData.thumbnail_image_file);
@@ -210,7 +222,7 @@ export default function Modal({
       if (!res.ok) throw new Error("Failed to update venue");
 
       setVenues((prev: any) =>
-        prev.map((v: any) => (v.venue_id === venueId ? venueData : v))
+        prev.map((v: any) => (v.venue_id === venueId ? venueData : v)),
       );
       onClose();
     } catch (err) {
@@ -239,7 +251,7 @@ export default function Modal({
       if (!res.ok) toast.error("Something went wrong while updating Slots!");
 
       setSlots((prev: any) =>
-        prev.map((s: any) => (s.slot_id === slotId ? requestData : s))
+        prev.map((s: any) => (s.slot_id === slotId ? requestData : s)),
       );
       onClose();
     } catch (err) {
@@ -268,7 +280,7 @@ export default function Modal({
       if (!res.ok) throw new Error("Failed to update score");
 
       setScores((prev: any) =>
-        prev.map((s: any) => (s.rating_id === ratingId ? requestData : s))
+        prev.map((s: any) => (s.rating_id === ratingId ? requestData : s)),
       );
       onClose();
     } catch (err) {
@@ -297,10 +309,10 @@ export default function Modal({
               {modalType === "venue"
                 ? "Venue"
                 : modalType === "slot"
-                ? "Time Slot"
-                : modalType === "score"
-                ? "Rating"
-                : ""}
+                  ? "Time Slot"
+                  : modalType === "score"
+                    ? "Rating"
+                    : ""}
             </h3>
             <button
               onClick={onClose}

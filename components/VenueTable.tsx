@@ -20,7 +20,7 @@ export default function VenueTable({
 
   const deleteVenue = async (venueId: string) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this venue?"
+      "Are you sure you want to delete this venue?",
     );
     if (!confirmed) return;
 
@@ -55,11 +55,8 @@ export default function VenueTable({
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-100">
-        {(venues || []).map((venue: any) => (
-          <tr
-            key={venue.venue_id}
-            className="hover:bg-gray-50 transition-colors"
-          >
+        {(venues || []).map((venue: any, index) => (
+          <tr key={index} className="hover:bg-gray-50 transition-colors">
             <td className="py-4 px-4 font-medium text-gray-900">
               {venue.name}
             </td>
